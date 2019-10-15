@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:columnCount="2"
+    android:padding="15dp"
+    tools:context=".MainActivity"
+    >
+
+    <TextView
+        android:id="@+id/rulesTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/welcome_rules"
+        android:layout_columnSpan="2"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/player1TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnSpan="1"
+        android:text="@string/player1_textVeiw" />
+
+    <EditText
+        android:id="@+id/player1EditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_columnSpan="1"
+        android:hint="@string/player1_editText_hint"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/player2TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnSpan="1"
+        android:text="@string/player2_textVeiw" />
+
+    <EditText
+        android:id="@+id/player2EditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_columnSpan="1"
+        android:hint="@string/player2_editText_hint"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/buttonText"
+        android:layout_columnSpan="2"
+        android:padding="10dp"
+        android:textAlignment="center" />
+</GridLayout>

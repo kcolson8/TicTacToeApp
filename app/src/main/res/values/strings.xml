@@ -1,3 +1,16 @@
 <resources>
-    <string name="app_name">PA5</string>
+    <string name="app_name">Tic Tac Toe</string>
+    <string name="welcome_rules">Welcome to Tic Tac Toe! There are two players.
+        Player 1 is represented by an X and Player 2 is represented by an O.
+        The first player to get 3 Xs or Os in a row vertically, horizontally, or diagonally wins.
+    </string>
+
+    <string name="player1_textVeiw">Player 1 Name: </string>
+    <string name="player1_editText_hint">Player 1 enter your name</string>
+
+    <string name="player2_textVeiw">Player 2 Name: </string>
+    <string name="player2_editText_hint">Player 2 enter your name</string>
+
+    <string name="buttonText">Play!</string>
+
 </resources>
