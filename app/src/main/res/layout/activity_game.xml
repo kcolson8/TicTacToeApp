@@ -112,13 +112,15 @@
 
     <TextView
         android:id="@+id/outputMessageTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_rowWeight="1"
         android:layout_columnWeight="1"
         android:layout_columnSpan="2"
-        android:textColor="@color/white"
-        />
+        android:layout_margin="10dp"
+        android:textSize="18dp"
+        android:textAlignment="center"
+        android:textColor="@color/white" />
 
     <Button
         android:id="@+id/playAgainButton"
@@ -128,7 +130,7 @@
         android:layout_columnWeight="2"
         android:layout_columnSpan="2"
         android:layout_gravity=""
-        android:visibility="visible"
+        android:visibility="invisible"
         android:text="PlayAgain" />
 
     <Button

@@ -14,14 +14,16 @@
         android:layout_height="wrap_content"
         android:text="@string/welcome_rules"
         android:layout_columnSpan="2"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:textSize="20dp"/>
 
     <TextView
         android:id="@+id/player1TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_columnSpan="1"
-        android:text="@string/player1_textVeiw" />
+        android:text="@string/player1_textVeiw"
+        android:textSize="18dp"/>
 
     <EditText
         android:id="@+id/player1EditText"
@@ -36,7 +38,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_columnSpan="1"
-        android:text="@string/player2_textView" />
+        android:text="@string/player2_textView"
+        android:textSize="18dp"/>
 
     <EditText
         android:id="@+id/player2EditText"
