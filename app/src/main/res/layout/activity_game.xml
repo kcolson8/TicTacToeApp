@@ -1,103 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
 <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:columnCount="3"
     android:padding="15dp"
     android:background="@color/colorPrimaryDark"
-    tools:context=".MainActivity"
+    tools:context=".GameActivity"
     >
 
     <ImageView
         android:id="@+id/imageView00"
+        android:tag="00"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_columnWeight="1"
         android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
         android:layout_margin="10dp"
         android:background="@color/white"
+        android:clickable="true"
+        android:onClick="onClick"
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView
         android:id="@+id/imageView10"
+        android:tag="10"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_columnWeight="1"
         android:layout_rowWeight="1"
         android:layout_margin="10dp"
         android:background="@color/white"
+        android:clickable="true"
+        android:onClick="onClick"
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView
         android:id="@+id/imageView20"
+        android:tag="20"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_columnWeight="1"
         android:layout_rowWeight="1"
         android:layout_margin="10dp"
         android:background="@color/white"
+        android:clickable="true"
+        android:onClick="onClick"
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView
         android:id="@+id/imageView01"
+        android:tag="01"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_columnWeight="1"
         android:layout_rowWeight="1"
         android:layout_margin="10dp"
         android:background="@color/white"
+        android:clickable="true"
+        android:onClick="onClick"
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView
         android:id="@+id/imageView11"
+        android:tag="11"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_columnWeight="1"
         android:layout_rowWeight="1"
         android:layout_margin="10dp"
         android:background="@color/white"
+        android:clickable="true"
+        android:onClick="onClick"
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView
         android:id="@+id/imageView21"
+        android:tag="21"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_columnWeight="1"
         android:layout_rowWeight="1"
         android:layout_margin="10dp"
         android:background="@color/white"
+        android:clickable="true"
+        android:onClick="onClick"
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView
         android:id="@+id/imageView02"
+        android:tag="02"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_columnWeight="1"
         android:layout_rowWeight="1"
         android:layout_margin="10dp"
         android:background="@color/white"
+        android:clickable="true"
+        android:onClick="onClick"
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView
         android:id="@+id/imageView12"
+        android:tag="12"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_columnWeight="1"
         android:layout_rowWeight="1"
         android:layout_margin="10dp"
         android:background="@color/white"
+        android:clickable="true"
+        android:onClick="onClick"
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView
         android:id="@+id/imageView22"
+        android:tag="22"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_columnWeight="1"
         android:layout_rowWeight="1"
         android:layout_margin="10dp"
         android:background="@color/white"
+        android:clickable="true"
+        android:onClick="onClick"
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView

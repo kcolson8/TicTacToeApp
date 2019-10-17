@@ -13,6 +13,14 @@ public class MainActivity extends AppCompatActivity {
     static final String TAG = "TicTacToeMainTag";
     static final int PLAYERS_REQUEST_CODE = 1;
 
+    //Credit for sheep icon
+    //<div>Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> from <a href="https://www.flaticon.com/"
+    // title="Flaticon">www.flaticon.com</a></div>
+
+    //Credit for pig icon
+    //<div>Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> from <a href="https://www.flaticon.com/"
+    // title="Flaticon">www.flaticon.com</a></div>
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

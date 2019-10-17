@@ -4,40 +4,44 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Random;
 
 public class GameActivity extends AppCompatActivity {
+    static String currentPlayer;
+    static String player1;
+    static String player2;
+    TextView messageToUser;
+    ImageView currentPlayerImage;
+    TicTacToeBoard board;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        board = new TicTacToeBoard();
 
-        TextView messageToUser = (TextView) findViewById(R.id.outputMessageTextView);
-        ImageView currentPlayerImage = (ImageView) findViewById(R.id.currentPlayerImageView);
+        messageToUser = (TextView) findViewById(R.id.outputMessageTextView);
+        currentPlayerImage = (ImageView) findViewById(R.id.currentPlayerImageView);
         Intent intent = getIntent();
         if(intent != null){
-            String player1 = intent.getStringExtra("player1");
-            String player2 = intent.getStringExtra("player2");
+            player1 = intent.getStringExtra("player1");
+            player2 = intent.getStringExtra("player2");
 
-            String currentPlayer = chooseStartPlayer(player1, player2);
-            messageToUser.setText(currentPlayer + " is going first");
+            currentPlayer = chooseStartPlayer(player1, player2);
 
-            if(currentPlayer == player1) {
-                //player 1 is represented by a sheep
-                currentPlayerImage.setImageResource(R.drawable.sheep);
-            } else {
-                //player 2 is represented by a pig
-                currentPlayerImage.setImageResource(R.drawable.pig);
-            }
-
+            gameLoop(currentPlayerImage,messageToUser);
         }
 
         Button quitButton = (Button) findViewById(R.id.quitButton);
@@ -49,6 +53,37 @@ public class GameActivity extends AppCompatActivity {
         });
     }
 
+    public void gameLoop(ImageView currentPlayerImage, TextView messageToUser){
+        int icon;
+        if(currentPlayer == player1) {
+            //player 1 is represented by a sheep
+            icon = R.drawable.sheep;
+            currentPlayerImage.setImageResource(icon);
+            messageToUser.setText("It is " + currentPlayer + "'s turn\n Please tap a blank square to make a move");
+        } else {
+            //player 2 is represented by a pig
+            icon = R.drawable.pig;
+            currentPlayerImage.setImageResource(icon);
+            messageToUser.setText("It is " + currentPlayer + "'s turn\n Please tap a blank square to make a move");
+        }
+    }
+
+    public void onClick(View view) {
+        ImageView image = (ImageView) view;
+        if(currentPlayer == player1){
+            //player 1 is represented by a sheep
+            image.setImageResource(R.drawable.sheep);
+        } else {
+            //player 2 is represented by a pig
+            image.setImageResource(R.drawable.pig);
+        }
+        int rowPlacement = image.getTag().toString().charAt(0); //first digit of tag
+        int columnPlacement = image.getTag().toString().charAt(1); //second digit of tag
+        //getPlayerCoord(currentPlayer, board, rowPlacement, columnPlacement);
+        currentPlayer = changePlayer(currentPlayer);
+        gameLoop(currentPlayerImage, messageToUser);
+    }
+
     //uses Random function to randomly choose between player X and player O for who goes first
     //returns the selected random start player
     public static String chooseStartPlayer(String player1, String player2){
@@ -58,6 +93,29 @@ public class GameActivity extends AppCompatActivity {
         String currentPlayer = players[playerIndex];
         return currentPlayer;
     }
+
+    //accepts as a parameter the current player and accordingly returns the other player to switch turns
+    public static String changePlayer(String currentPlayer){
+        if(currentPlayer == player1){
+            currentPlayer = player2;
+        }else {
+            currentPlayer = player1;
+        }
+        return currentPlayer;
+    }
+
+    //asks for player to enter the coordinates for where they would like to place their X or O
+    //checks that the specified coordinates are available and do not already have an X or O in its cell
+    public static void getPlayerCoord(String currentPlayer, TicTacToeBoard board, int rowPlacement, int columnPlacement){
+        Coordinates coordinates = new Coordinates(columnPlacement, rowPlacement);
+        if(board.isValidMove(coordinates)) {
+            board.makeMove(coordinates, currentPlayer);
+        } else {
+            System.out.println(coordinates.toString() + " is not a valid move");
+            getPlayerCoord(currentPlayer, board, rowPlacement, columnPlacement); //recursively calls function until valid coordinates are entered
+        }
+    }
+
 }
 
 
@@ -87,25 +145,6 @@ public class Driver {
         }
     }
 
-    //series of print statements for the user to learn how to play the game
-    public static void displayInstructions(){
-        System.out.println("Let's ply Tic Tac Toe!");
-        System.out.println("Instructions:");
-        System.out.println("This is a two player game, where one player will be player 'X', the other, player 'O'.");
-        System.out.println("The board's dimensions will be N x N and the goal is to get N number of X's or O's in a row either diagonally, vertically, or horizontally.");
-    }
-
-    //uses Random function to randomly choose between player X and player O for who goes first
-    //returns the selected random start player
-    public static String chooseStartPlayer(){
-        String[] players = {"X", "O"};
-        Random rand = new Random();
-        int playerIndex = rand.nextInt(2);
-        String currentPlayer = players[playerIndex];
-        System.out.println("Player " + currentPlayer + " is going first.");
-        return currentPlayer;
-    }
-
     //asks for user to enter the size of the board
     //returns the specified board size
     public static int getBoardSize(){
@@ -133,15 +172,6 @@ public class Driver {
         }
     }
 
-    //accepts as a parameter the current player and accordingly returns the other player to switch turns
-    public static String changePlayer(String currentPlayer){
-        if(currentPlayer == "X"){
-            currentPlayer = "O";
-        }else {
-            currentPlayer = "X";
-        }
-        return currentPlayer;
-    }
 }
 
  */
