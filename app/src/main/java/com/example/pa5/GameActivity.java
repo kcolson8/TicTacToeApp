@@ -4,8 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.Icon;
 import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
@@ -22,15 +20,13 @@ public class GameActivity extends AppCompatActivity {
     static String player2;
     TextView messageToUser;
     ImageView currentPlayerImage;
-    TicTacToeBoard board;
-
-
+    TicTacToeBoard board = new TicTacToeBoard(3);
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-        board = new TicTacToeBoard();
+        int icon;
 
         messageToUser = (TextView) findViewById(R.id.outputMessageTextView);
         currentPlayerImage = (ImageView) findViewById(R.id.currentPlayerImageView);
@@ -40,8 +36,14 @@ public class GameActivity extends AppCompatActivity {
             player2 = intent.getStringExtra("player2");
 
             currentPlayer = chooseStartPlayer(player1, player2);
-
-            gameLoop(currentPlayerImage,messageToUser);
+            if(currentPlayer.equals(player1)){
+                icon = R.drawable.sheep;
+            } else {
+                icon = R.drawable.pig;
+            }
+            currentPlayerImage.setImageResource(icon);
+            messageToUser.setText("It is " + currentPlayer + "'s turn\n Please tap a blank square to make a move");
+            currentPlayer = changePlayer(currentPlayer, currentPlayerImage, messageToUser);
         }
 
         Button quitButton = (Button) findViewById(R.id.quitButton);
@@ -51,37 +53,62 @@ public class GameActivity extends AppCompatActivity {
                 GameActivity.this.finish();
             }
         });
+
+        Button playAgainButton = (Button) findViewById(R.id.playAgainButton);
+        playAgainButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                resetGame();
+            }
+        });
     }
 
-    public void gameLoop(ImageView currentPlayerImage, TextView messageToUser){
-        int icon;
-        if(currentPlayer == player1) {
-            //player 1 is represented by a sheep
-            icon = R.drawable.sheep;
-            currentPlayerImage.setImageResource(icon);
-            messageToUser.setText("It is " + currentPlayer + "'s turn\n Please tap a blank square to make a move");
+    public void gameSetup() {
+        currentPlayer = chooseStartPlayer(player1, player2);
+        if(currentPlayer.equals(player1)){
+            currentPlayerImage.setImageResource(R.drawable.sheep);
         } else {
-            //player 2 is represented by a pig
-            icon = R.drawable.pig;
-            currentPlayerImage.setImageResource(icon);
-            messageToUser.setText("It is " + currentPlayer + "'s turn\n Please tap a blank square to make a move");
+            currentPlayerImage.setImageResource(R.drawable.pig);
         }
+        messageToUser.setText("It is " + currentPlayer + "'s turn\n Please tap a blank square to make a move");
     }
 
     public void onClick(View view) {
         ImageView image = (ImageView) view;
-        if(currentPlayer == player1){
-            //player 1 is represented by a sheep
-            image.setImageResource(R.drawable.sheep);
+        int rowPlacement = Integer.parseInt(image.getTag().toString().substring(0,1)); //first digit of tag
+        int columnPlacement = Integer.parseInt(image.getTag().toString().substring(1,2)); //second digit of tag
+        Coordinates coordinates = new Coordinates(rowPlacement, columnPlacement);
+        Button playAgainButton = (Button) findViewById(R.id.playAgainButton);
+
+        int icon;
+
+        if(currentPlayer.equals(player1)){
+            icon = R.drawable.sheep;
         } else {
-            //player 2 is represented by a pig
-            image.setImageResource(R.drawable.pig);
+            icon = R.drawable.pig;
         }
-        int rowPlacement = image.getTag().toString().charAt(0); //first digit of tag
-        int columnPlacement = image.getTag().toString().charAt(1); //second digit of tag
-        //getPlayerCoord(currentPlayer, board, rowPlacement, columnPlacement);
-        currentPlayer = changePlayer(currentPlayer);
-        gameLoop(currentPlayerImage, messageToUser);
+
+        if(!board.isWinner(icon) && board.isValidMove(coordinates)){
+            image.setImageResource(icon);
+            board.makeMove(coordinates, icon);
+            if(!board.isWinner(icon)) {
+                currentPlayer = changePlayer(currentPlayer, currentPlayerImage, messageToUser);
+            }
+        } else if(!board.isValidMove(coordinates)){
+            messageToUser.setText("Not a valid move, tap a blank square to make a move. It is still " + currentPlayer + "'s turn.");
+        }
+
+        if(board.isWinner(icon)){
+            if(currentPlayer.equals(player1)) {
+                messageToUser.setText("Congratulations " + player1 + ", you have won!\n Would you like to play again?");
+            } else {
+                messageToUser.setText("Congratulations " + player2 + ", you have won!\n Would you like to play again?");
+            }
+            playAgainButton.setVisibility(view.VISIBLE);
+        } else if(board.isDraw()){
+            messageToUser.setText("The game has ended in a draw.\n Would you like to play again?");
+            playAgainButton.setVisibility(view.VISIBLE);
+        }
     }
 
     //uses Random function to randomly choose between player X and player O for who goes first
@@ -90,88 +117,58 @@ public class GameActivity extends AppCompatActivity {
         String[] players = {player1, player2};
         Random rand = new Random();
         int playerIndex = rand.nextInt(2);
-        String currentPlayer = players[playerIndex];
+        currentPlayer = players[playerIndex];
         return currentPlayer;
     }
 
     //accepts as a parameter the current player and accordingly returns the other player to switch turns
-    public static String changePlayer(String currentPlayer){
-        if(currentPlayer == player1){
+    public static String changePlayer(String currentPlayer, ImageView currentPlayerImage, TextView messageToUser) {
+        if (currentPlayer.equals(player1)) {
             currentPlayer = player2;
-        }else {
+            currentPlayerImage.setImageResource(R.drawable.pig);
+        } else {
             currentPlayer = player1;
+            currentPlayerImage.setImageResource(R.drawable.sheep);
+
         }
+        messageToUser.setText("It is " + currentPlayer + "'s turn\n Please tap a blank square to make a move");
+
         return currentPlayer;
     }
 
-    //asks for player to enter the coordinates for where they would like to place their X or O
-    //checks that the specified coordinates are available and do not already have an X or O in its cell
-    public static void getPlayerCoord(String currentPlayer, TicTacToeBoard board, int rowPlacement, int columnPlacement){
-        Coordinates coordinates = new Coordinates(columnPlacement, rowPlacement);
-        if(board.isValidMove(coordinates)) {
-            board.makeMove(coordinates, currentPlayer);
-        } else {
-            System.out.println(coordinates.toString() + " is not a valid move");
-            getPlayerCoord(currentPlayer, board, rowPlacement, columnPlacement); //recursively calls function until valid coordinates are entered
-        }
+    public void resetGame(){
+        board = new TicTacToeBoard(3);
+        ImageView imageView00 = (ImageView) findViewById(R.id.imageView00);
+        imageView00.setImageResource(0);
+
+        ImageView imageView01 = (ImageView) findViewById(R.id.imageView01);
+        imageView01.setImageResource(0);
+
+        ImageView imageView02 = (ImageView) findViewById(R.id.imageView02);
+        imageView02.setImageResource(0);
+
+        ImageView imageView10 = (ImageView) findViewById(R.id.imageView10);
+        imageView10.setImageResource(0);
+
+        ImageView imageView11 = (ImageView) findViewById(R.id.imageView11);
+        imageView11.setImageResource(0);
+
+        ImageView imageView12 = (ImageView) findViewById(R.id.imageView12);
+        imageView12.setImageResource(0);
+
+        ImageView imageView20 = (ImageView) findViewById(R.id.imageView20);
+        imageView20.setImageResource(0);
+
+        ImageView imageView21 = (ImageView) findViewById(R.id.imageView21);
+        imageView21.setImageResource(0);
+
+        ImageView imageView22 = (ImageView) findViewById(R.id.imageView22);
+        imageView22.setImageResource(0);
+
+        Button playAgainButton = (Button) findViewById(R.id.playAgainButton);
+        playAgainButton.setVisibility(View.INVISIBLE);
+        gameSetup();
+
     }
 
 }
-
-
-
-/*
-import java.util.Random;
-import java.util.Scanner;
-
-
-public class Driver {
-    public static void main(String[] args) {
-        //variable declarations
-        String currentPlayer;
-
-        //game setup
-        displayInstructions();
-        final int BOARD_SIZE = getBoardSize();
-        TicTacToeBoard board = new TicTacToeBoard(BOARD_SIZE);
-        currentPlayer = chooseStartPlayer();
-
-        //loops while there is not yet a winner and the board is not full
-        while(!board.isWinner(currentPlayer)){
-            System.out.println(board.toString());
-            getPlayerCoord(currentPlayer, board);
-            System.out.println(board.toString());
-            currentPlayer = changePlayer(currentPlayer);
-        }
-    }
-
-    //asks for user to enter the size of the board
-    //returns the specified board size
-    public static int getBoardSize(){
-        Scanner input = new Scanner(System.in);
-        System.out.println("Enter N for the dimensions of the board to be N x N cells: ");
-        int boardSize = input.nextInt();
-        return boardSize;
-    }
-
-    //asks for player to enter the coordinates for where they would like to place their X or O
-    //checks that the specified coordinates are available and do not already have an X or O in its cell
-    public static void getPlayerCoord(String currentPlayer, TicTacToeBoard board){
-        Scanner input = new Scanner(System.in);
-        System.out.println("Player " + currentPlayer + ", please enter the column coordinate of your placement: ");
-        int columnPlacement = input.nextInt();
-        System.out.println("Player " + currentPlayer + ", please enter the row coordinate of your placement: ");
-        int rowPlacement = input.nextInt();
-
-        Coordinates coordinates = new Coordinates(columnPlacement, rowPlacement);
-        if(board.isValidMove(coordinates)) {
-            board.makeMove(coordinates, currentPlayer);
-        } else {
-            System.out.println(coordinates.toString() + " is not a valid move");
-            getPlayerCoord(currentPlayer, board); //recursively calls function until valid coordinates are entered
-        }
-    }
-
-}
-
- */

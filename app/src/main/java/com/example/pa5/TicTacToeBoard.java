@@ -11,7 +11,7 @@ public class TicTacToeBoard {
         grid = new Cell[N][N];
         for(int i = 0; i < N; i++){
             for(int j = 0; j < N; j++){
-                grid[i][j] = new Cell("-", i, j);
+                grid[i][j] = new Cell(0, i, j);
             }
         }
     }
@@ -22,7 +22,7 @@ public class TicTacToeBoard {
         grid = new Cell[N][N];
         for(int i = 0; i < N; i++){
             for(int j = 0; j < N; j++){
-                grid[i][j] = new Cell("-",i,j);
+                grid[i][j] = new Cell(0,i,j);
             }
         }
     }
@@ -33,7 +33,7 @@ public class TicTacToeBoard {
     }
 
     @Override
-    //overriden toString function prints out grid(board)
+    //overridden toString function prints out grid(board)
     public String toString() {
         String gridString = "";
         for(int k = 0; k < N; k++){
@@ -54,7 +54,7 @@ public class TicTacToeBoard {
     //returns true if the coordinates specified contain a dash, otherwise function returns false meaning
     //the coordinates have already been specified previously
     public boolean isValidMove(Coordinates coordinates){
-        if(grid[coordinates.getColumn()][coordinates.getRow()].toString() == "-"){
+        if(grid[coordinates.getColumn()][coordinates.getRow()].symbol == 0){
             return true;
         } else {
             return false;
@@ -62,14 +62,14 @@ public class TicTacToeBoard {
     }
 
     //updates grid member symbol at the specified coordinates to the player's symbol(X or O)
-    public void makeMove(Coordinates coordinates, String playerSymbol){
+    public void makeMove(Coordinates coordinates, int playerSymbol){
         grid[coordinates.getColumn()][coordinates.getRow()].symbol= playerSymbol;
         moveCount++;
     }
 
     //returns true if one of the players have won by getting N in a row horizontally, vertically, or diagonally.
     //returns false otherwise
-    public boolean isWinner(String playerSymbol){
+    public boolean isWinner(int playerSymbol){
         boolean won = false;
 
         //checks if there is a winner only if there have been enough moves made to allow a winner
@@ -98,26 +98,24 @@ public class TicTacToeBoard {
     //returns false otherwise
     public boolean isRowWin(){
         //initializing counter variables
-        int numXs = 0;
-        int numOs = 0;
+        int numSheep = 0;
+        int numPigs = 0;
         for (int i = 0; i < N; i++) {
             for(int j = 0; j < N; j++) {
-                if (grid[i][j].symbol.equals("X")) {
-                    numXs++;
-                } else if (grid[i][j].symbol.equals("O")) {
-                    numOs++;
+                if (grid[i][j].symbol == R.drawable.sheep) {
+                    numSheep++;
+                } else if (grid[i][j].symbol == R.drawable.pig) {
+                    numPigs++;
                 }
             }
-            if(numOs== N){
-                System.out.println("Congratulations Player O, you have won!");
+            if(numPigs == N){
                 return true;
-            } else if (numXs== N){
-                System.out.println("Congratulations Player X, you have won!");
+            } else if (numSheep == N){
                 return true;
             }
             //resetting counter variables to check next row
-            numXs = 0;
-            numOs = 0;
+            numSheep = 0;
+            numPigs = 0;
         }
 
         return false;
@@ -128,33 +126,29 @@ public class TicTacToeBoard {
     //returns false otherwise
     public boolean isColumnWin(){
         //initializing counter variables
-        int numXs = 0;
-        int numOs = 0;
+        int numSheep = 0;
+        int numPigs = 0;
 
         for(int i = 0; i < N; i++){
             for(int j = 0; j < N; j++){
-                if (grid[j][i].symbol.equals("X")) {
-                    numXs++;
-                } else if (grid[j][i].symbol.equals("O")) {
-                    numOs++;
+                if (grid[j][i].symbol == R.drawable.pig) {
+                    numPigs++;
+                } else if (grid[j][i].symbol == R.drawable.sheep) {
+                    numSheep++;
                 }
             }
-            if(numOs== N){
-                System.out.println("Congratulations Player O, you have won!");
+            if(numPigs == N){
                 return true;
-            } else if (numXs== N){
-                System.out.println("Congratulations Player X, you have won!");
+            } else if (numSheep == N){
                 return true;
             }
             //resetting counter variables to check next column
-            numXs = 0;
-            numOs = 0;
+            numSheep = 0;
+            numPigs = 0;
         }
-        if(numOs== N){
-            System.out.println("Congratulations Player O, you have won!");
+        if(numPigs == N){
             return true;
-        } else if (numXs== N){
-            System.out.println("Congratulations Player X, you have won!");
+        } else if (numSheep == N){
             return true;
         }
         return false;
@@ -165,23 +159,21 @@ public class TicTacToeBoard {
     //returns false otherwise
     public boolean isDiagonalWin(){
         //initializing counter variables
-        int numXs = 0;
-        int numOs = 0;
+        int numSheep = 0;
+        int numPigs = 0;
 
         //checks diagonal for player win
         for(int i = 0, j = 0; i < N; i++, j++){
-            if(grid[i][j].symbol.equals("X")){
-                numXs++;
-            } else if(grid[i][j].symbol.equals("O")){
-                numOs++;
+            if(grid[i][j].symbol == R.drawable.sheep){
+                numSheep++;
+            } else if(grid[i][j].symbol == R.drawable.pig){
+                numPigs++;
             }
         }
 
-        if(numOs== N){
-            System.out.println("Congratulations Player O, you have won!");
+        if(numSheep == N){
             return true;
-        } else if (numXs== N){
-            System.out.println("Congratulations Player X, you have won!");
+        } else if (numPigs== N){
             return true;
         }
 
@@ -193,22 +185,20 @@ public class TicTacToeBoard {
     //returns false otherwise
     public boolean isAntiDiagonalWin(){
         //initializing counter variables
-        int numXs = 0;
-        int numOs = 0;
+        int numSheep = 0;
+        int numPigs = 0;
 
         //checks anti diagonal for player win
         for(int i = 0, j = N - 1; i < N && j >= 0; i++, j--){
-            if(grid[i][j].symbol.equals("X")){
-                numXs++;
-            } else if(grid[i][j].symbol.equals("O")){
-                numOs++;
+            if(grid[i][j].symbol == R.drawable.sheep){
+                numSheep++;
+            } else if(grid[i][j].symbol == R.drawable.pig){
+                numPigs++;
             }
         }
-        if(numOs== N){
-            System.out.println("Congratulations Player O, you have won!");
+        if(numPigs == N){
             return true;
-        } else if (numXs== N){
-            System.out.println("Congratulations Player X, you have won!");
+        } else if (numSheep== N){
             return true;
         }
 
@@ -218,7 +208,6 @@ public class TicTacToeBoard {
     //returns true if board is full and neither player has won, returns false otherwise
     public boolean isDraw(){
         if(moveCount == Math.pow(N, 2)){
-            System.out.println("This game has ended in a draw.");
             return true;
         }
         return false;
