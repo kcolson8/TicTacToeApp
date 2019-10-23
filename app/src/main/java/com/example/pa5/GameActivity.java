@@ -2,9 +2,7 @@ package com.example.pa5;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -30,22 +28,19 @@ public class GameActivity extends AppCompatActivity {
 
         messageToUser = (TextView) findViewById(R.id.outputMessageTextView);
         currentPlayerImage = (ImageView) findViewById(R.id.currentPlayerImageView);
+
         Intent intent = getIntent();
+        //checks that the intent is good
         if(intent != null){
             player1 = intent.getStringExtra("player1");
             player2 = intent.getStringExtra("player2");
 
-            currentPlayer = chooseStartPlayer(player1, player2);
-            if(currentPlayer.equals(player1)){
-                icon = R.drawable.sheep;
-            } else {
-                icon = R.drawable.pig;
-            }
-            currentPlayerImage.setImageResource(icon);
+            gameSetup();
             messageToUser.setText("It is " + currentPlayer + "'s turn\n Please tap a blank square to make a move");
             currentPlayer = changePlayer(currentPlayer, currentPlayerImage, messageToUser);
         }
 
+        //gets reference to the Quit button and returns the players to the home screen if it is clicked
         Button quitButton = (Button) findViewById(R.id.quitButton);
         quitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,6 +49,7 @@ public class GameActivity extends AppCompatActivity {
             }
         });
 
+        //gets reference to the Play Again button and calls resetGame() if it is clicked
         Button playAgainButton = (Button) findViewById(R.id.playAgainButton);
         playAgainButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,6 +59,7 @@ public class GameActivity extends AppCompatActivity {
         });
     }
 
+    //chooses a random start player and accordingly sets the image view and the message text view
     public void gameSetup() {
         currentPlayer = chooseStartPlayer(player1, player2);
         if(currentPlayer.equals(player1)){
@@ -73,6 +70,9 @@ public class GameActivity extends AppCompatActivity {
         messageToUser.setText("It is " + currentPlayer + "'s turn\n Please tap a blank square to make a move");
     }
 
+    //When an imageView is clicked on by a player, onClick() is called
+    //onClick() sets the imageView to the icon representative of the current player who clicked on the
+    //imageView if it is a valid move and checks if the game has been won or if it has ended in a tie.
     public void onClick(View view) {
         ImageView image = (ImageView) view;
         int rowPlacement = Integer.parseInt(image.getTag().toString().substring(0,1)); //first digit of tag
@@ -82,36 +82,42 @@ public class GameActivity extends AppCompatActivity {
 
         int icon;
 
+        //sets icon image according to the current player
         if(currentPlayer.equals(player1)){
             icon = R.drawable.sheep;
         } else {
             icon = R.drawable.pig;
         }
 
+        //checks that the game has not been won and that the location selected is valid before setting the imageView
         if(!board.isWinner(icon) && board.isValidMove(coordinates)){
             image.setImageResource(icon);
             board.makeMove(coordinates, icon);
+
+            //checks that most recent move did not result in the game being won to change current player
             if(!board.isWinner(icon)) {
                 currentPlayer = changePlayer(currentPlayer, currentPlayerImage, messageToUser);
             }
         } else if(!board.isValidMove(coordinates)){
-            messageToUser.setText("Not a valid move, tap a blank square to make a move. It is still " + currentPlayer + "'s turn.");
+            //lets player know via a Toast message that the imageView they clicked was not a valid one to make their move
+            Toast.makeText(GameActivity.this, "Not a valid move", Toast.LENGTH_SHORT).show();
         }
 
+        //checks if the game has been won to accordingly update the message text view and
+        //make the Play Again button visible to the players
         if(board.isWinner(icon)){
-            if(currentPlayer.equals(player1)) {
-                messageToUser.setText("Congratulations " + player1 + ", you have won!\n Would you like to play again?");
-            } else {
-                messageToUser.setText("Congratulations " + player2 + ", you have won!\n Would you like to play again?");
-            }
+            messageToUser.setText("Congratulations " + currentPlayer + ", you have won!\n Would you like to play again?");
             playAgainButton.setVisibility(view.VISIBLE);
-        } else if(board.isDraw()){
+        }
+        //checks if the game has resulted in a draw to accordingly update the message text view and
+        //make the Play Again button visible to the players
+        else if(board.isDraw()){
             messageToUser.setText("The game has ended in a draw.\n Would you like to play again?");
             playAgainButton.setVisibility(view.VISIBLE);
         }
     }
 
-    //uses Random function to randomly choose between player X and player O for who goes first
+    //uses Random function to randomly choose between player 1 and player 2 for who goes first
     //returns the selected random start player
     public static String chooseStartPlayer(String player1, String player2){
         String[] players = {player1, player2};
@@ -122,6 +128,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     //accepts as a parameter the current player and accordingly returns the other player to switch turns
+    //updates the current player imageView and the message text view accordingly
     public static String changePlayer(String currentPlayer, ImageView currentPlayerImage, TextView messageToUser) {
         if (currentPlayer.equals(player1)) {
             currentPlayer = player2;
@@ -136,6 +143,9 @@ public class GameActivity extends AppCompatActivity {
         return currentPlayer;
     }
 
+    //resets all of the imageViews to be blank, sets the play again button to be invisible,
+    //and calls gameSetup() to randomly choose who will go first and set the player imageView and the message
+    // text view accordingly
     public void resetGame(){
         board = new TicTacToeBoard(3);
         ImageView imageView00 = (ImageView) findViewById(R.id.imageView00);
@@ -168,7 +178,6 @@ public class GameActivity extends AppCompatActivity {
         Button playAgainButton = (Button) findViewById(R.id.playAgainButton);
         playAgainButton.setVisibility(View.INVISIBLE);
         gameSetup();
-
     }
 
 }

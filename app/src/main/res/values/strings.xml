@@ -2,10 +2,10 @@
     <string name="app_name">Tic Tac Toe</string>
     <string name="welcome_rules">Welcome to Tic Tac Toe! There are two players.
         Player 1 is represented by an image of a sheep and Player 2 is represented by an image of a pig.
-        The first player to get 3 Xs or Os in a row vertically, horizontally, or diagonally wins.
+        The first player to get 3 of their image in a row vertically, horizontally, or diagonally wins.
     </string>
 
-    <string name="player1_textVeiw">Player 1 Name: </string>
+    <string name="player1_textView">Player 1 Name: </string>
     <string name="player1_editText_hint">Player 1 enter your name</string>
 
     <string name="player2_textView">Player 2 Name: </string>

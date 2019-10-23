@@ -5,7 +5,7 @@ public class TicTacToeBoard {
     protected Cell[][] grid;
     protected int moveCount = 0;
 
-    //no argument constructor defaults board size to 3 and initializes grid(board) to all dashes(empty board)
+    //no argument constructor defaults board size to 3 and initializes grid(board) to be empty
     public TicTacToeBoard() {
         N = 3;
         grid = new Cell[N][N];
@@ -16,7 +16,7 @@ public class TicTacToeBoard {
         }
     }
 
-    //constructor takes n as an argument to set the board size to n and initializes grid(board) to all dashes(empty board)
+    //constructor takes n as an argument to set the board size to n and initializes grid(board) to be empty
     public TicTacToeBoard(int n) {
         N = n;
         grid = new Cell[N][N];
@@ -27,32 +27,8 @@ public class TicTacToeBoard {
         }
     }
 
-    //getter function for N(board size), returns N
-    public static int getN() {
-        return N;
-    }
-
-    @Override
-    //overridden toString function prints out grid(board)
-    public String toString() {
-        String gridString = "";
-        for(int k = 0; k < N; k++){
-            gridString += "  " + k;
-        }
-            gridString += '\n';
-        for(int i = 0; i < N; i++) {
-            gridString += i + " ";
-            for (int j = 0; j < N; j++) {
-                gridString += " " + grid[i][j] + " ";
-            }
-                gridString += '\n';
-        }
-
-        return gridString;
-    }
-
-    //returns true if the coordinates specified contain a dash, otherwise function returns false meaning
-    //the coordinates have already been specified previously
+    //returns true if the coordinates specified do not already contain a player's symbol,
+    //otherwise function returns false meaning the coordinates have already been previously clicked
     public boolean isValidMove(Coordinates coordinates){
         if(grid[coordinates.getColumn()][coordinates.getRow()].symbol == 0){
             return true;
@@ -61,7 +37,7 @@ public class TicTacToeBoard {
         }
     }
 
-    //updates grid member symbol at the specified coordinates to the player's symbol(X or O)
+    //updates grid member symbol at the specified coordinates to the player's symbol
     public void makeMove(Coordinates coordinates, int playerSymbol){
         grid[coordinates.getColumn()][coordinates.getRow()].symbol= playerSymbol;
         moveCount++;

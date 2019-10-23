@@ -17,13 +17,6 @@ public class Cell {
         this.cellCoord = new Coordinates(row, column);
     }
 
-    /*
-    @Override
-    //overridden toString method returns the symbol of the cell
-    public String toString(){
-        return symbol;
-    }
-    */
     //returns the cell's coordinates
     public Coordinates getCellCoord(){
         return cellCoord;
